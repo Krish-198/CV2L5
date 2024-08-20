@@ -13,13 +13,25 @@ if c is not None:
         cv2.circle(img,(a,b),1,color,thickness)
         cv2.imshow("Object Recognition",img)
         cv2.waitKey(0)
-
-
-
 img2=cv2.imread("blob.png",0)
-cv2.imshow("Object Recognition",img2)
 p=cv2.SimpleBlobDetector_Params()
 p.filterByArea=True
 p.minArea=100
+p.filterByCircularity=True
+p.minCircularity=0.9
+p.filterByConvexity=True
+p.minConvexity=0.2
+p.filterByInertia=True
+p.minInertiaRatio=0.01
+t=cv2.SimpleBlobDetector_create(p)
+r=t.detect(img2)
+e=np.zeros((7,7))
+v=cv2.drawKeypoints(img2,r,e,color,cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+noblobs=len(r)
+text="No blobs detected- " + str(noblobs)
+cv2.putText(v,text,(20,500),cv2.FONT_HERSHEY_SIMPLEX,1,color,thickness)
+
+cv2.imshow("Object Recognition",v)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
